@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Mobile AR Viewer</title>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <style>
+    html,body{margin:0;height:100%;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f5f5f5;color:#111}
+    .wrap{max-width:900px;margin:0 auto;padding:16px;box-sizing:border-box}
+    h1{font-size:22px;margin:4px 0 10px}
+    p{font-size:14px;line-height:1.55;color:#555}
+    model-viewer{width:100%;height:68vh;min-height:480px;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.08)}
+    .arbtn{background:#111;color:#fff;border:0;border-radius:999px;padding:14px 20px;font-size:16px;font-weight:700;box-shadow:0 4px 16px rgba(0,0,0,.22)}
+    .links{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+    .links a{display:inline-block;padding:10px 14px;border-radius:999px;background:white;color:#111;text-decoration:none;border:1px solid #ddd;font-size:14px}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <h1>모바일 AR 모델</h1>
+  <p>화면에서 모델을 회전·확대할 수 있습니다. 지원 기기에서는 아래 <b>AR로 보기</b> 버튼을 눌러 실제 공간에 배치하세요.</p>
+
+  <model-viewer
+    src="111_AR.glb"
+    ios-src="111_AR.usdz"
+    alt="SketchUp model AR preview"
+    ar
+    ar-modes="webxr scene-viewer quick-look"
+    camera-controls
+    touch-action="pan-y"
+    shadow-intensity="1"
+    exposure="1"
+    environment-image="neutral"
+    interaction-prompt="auto"
+    camera-orbit="45deg 65deg auto"
+    min-camera-orbit="auto auto 1m"
+    max-camera-orbit="auto auto 40m">
+    <button slot="ar-button" class="arbtn">AR로 보기</button>
+  </model-viewer>
+
+  <div class="links">
+    <a href="111_AR.glb">GLB 열기</a>
+    <a rel="ar" href="111_AR.usdz">iPhone/iPad AR Quick Look</a>
+  </div>
+</div>
+</body>
+</html>
