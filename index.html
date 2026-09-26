@@ -3,64 +3,180 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>Mobile AR</title>
+  <title>Furniture AR Viewer</title>
+
+  <script type="module"
+    src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js">
+  </script>
+
   <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f5f5f5;
-      color: #111;
+    :root{
+      --bg:#f3f0ea;
+      --card:#fff;
+      --line:#ddd5c8;
+      --text:#161616;
+      --muted:#706a63;
+      --soft:#f8f5f0;
     }
-    .card {
-      width: min(92vw, 560px);
-      background: #fff;
-      border-radius: 24px;
-      padding: 28px;
-      box-shadow: 0 12px 34px rgba(0,0,0,.10);
-      text-align: center;
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text);
     }
-    h1 { margin: 0 0 10px; font-size: 28px; }
-    p { line-height: 1.6; margin: 8px 0 18px; }
-    a[rel="ar"] { display:block; }
-    a[rel="ar"] img {
-      display:block;
+    .page{
+      width:min(1180px,calc(100% - 28px));
+      margin:auto;
+      padding:20px 0 34px;
+    }
+    header{text-align:center;padding:0 10px 24px}
+    h1{
+      margin:0;
+      font-size:clamp(28px,3.2vw,44px);
+      font-weight:800;
+      letter-spacing:.01em;
+    }
+    .sub{
+      margin:12px 0 0;
+      color:var(--muted);
+      font-size:clamp(14px,1.7vw,19px);
+    }
+    .card{
+      overflow:hidden;
+      border:1px solid var(--line);
+      border-radius:28px;
+      background:#fff;
+      box-shadow:0 18px 55px rgba(70,55,35,.09);
+    }
+    .viewer{
+      position:relative;
+      min-height:clamp(480px,68vh,790px);
+      background:
+        radial-gradient(circle at 50% 78%,rgba(75,65,55,.12),transparent 22%),
+        linear-gradient(#fff 0%,#fff 62%,#eee8df 100%);
+    }
+    model-viewer{
       width:100%;
-      height:auto;
+      height:clamp(480px,68vh,790px);
+      background:transparent;
+      --poster-color: transparent;
+    }
+    .ar-button{
+      position:absolute;
+      right:24px;
+      bottom:22px;
+      border:0;
+      border-radius:999px;
+      padding:15px 22px;
+      background:#111;
+      color:#fff;
+      font-weight:800;
+      font-size:16px;
+      cursor:pointer;
+      box-shadow:0 10px 25px rgba(0,0,0,.22);
+    }
+    .hint{
+      position:absolute;
+      left:22px;
+      bottom:22px;
+      padding:10px 13px;
+      border-radius:999px;
+      background:rgba(255,255,255,.88);
+      border:1px solid rgba(0,0,0,.08);
+      backdrop-filter:blur(8px);
+      color:#6e675f;
+      font-size:13px;
+    }
+    .info{
+      padding:28px 26px 26px;
+      border-top:1px solid #eee7dc;
+    }
+    .info h2{margin:0 0 12px;font-size:25px}
+    .info p{margin:0;color:var(--muted);font-size:16px;line-height:1.7}
+    .steps{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:12px;
+      margin-top:22px;
+    }
+    .step{
+      min-height:82px;
+      padding:17px 16px;
+      background:var(--soft);
+      border:1px solid var(--line);
       border-radius:18px;
     }
-    .note {
-      margin-top: 18px;
-      font-size: 14px;
-      color:#666;
+    .step b{display:block;margin-bottom:10px}
+    .step span{font-size:15px}
+    footer{text-align:center;color:#8c857d;font-size:14px;margin-top:48px}
+
+    @media(max-width:720px){
+      .page{width:calc(100% - 18px);padding-top:16px}
+      header{padding-bottom:18px}
+      .card{border-radius:22px}
+      .viewer,model-viewer{height:58vh;min-height:460px}
+      .steps{grid-template-columns:1fr 1fr}
+      .ar-button{right:14px;bottom:14px}
+      .hint{left:14px;bottom:14px}
+      .info{padding:22px 18px}
     }
-    .download {
-      display:inline-block;
-      margin-top:12px;
-      font-size:14px;
-      color:#333;
+    @media(max-width:460px){
+      .steps{grid-template-columns:1fr}
+      .hint{display:none}
     }
   </style>
 </head>
+
 <body>
-  <main class="card">
-    <h1>Mobile AR</h1>
-    <p>iPhone 또는 iPad의 Safari에서 아래 버튼을 누르면 AR Quick Look이 실행됩니다.</p>
+  <main class="page">
+    <header>
+      <h1>Furniture AR Viewer</h1>
+      <p class="sub">스마트폰으로 디자인을 3D로 확인하고, AR 버튼을 눌러 실제 공간에 배치해보세요.</p>
+    </header>
 
-    <a rel="ar" href="1234.usdz">
-      <img src="ar_button.png" alt="AR로 보기">
-    </a>
+    <section class="card">
+      <div class="viewer">
+        <model-viewer
+          src="./1234.glb"
+          ios-src="./1234.usdz"
+          alt="3D furniture model"
+          camera-controls
+          touch-action="pan-y"
+          auto-rotate
+          auto-rotate-delay="1500"
+          rotation-per-second="18deg"
+          shadow-intensity="1"
+          shadow-softness="0.8"
+          exposure="1"
+          environment-image="neutral"
+          ar
+          ar-modes="webxr scene-viewer quick-look"
+          ar-scale="auto"
+          camera-orbit="35deg 70deg auto"
+          min-camera-orbit="auto 10deg auto"
+          max-camera-orbit="auto 90deg auto">
 
-    <p class="note">
-      AR이 실행되지 않고 파일 내용이 보이면 Safari에서 이 페이지를 열었는지 확인하고,
-      GitHub Pages에서 <b>index.html</b>과 <b>1234.usdz</b>가 같은 폴더에 있는지 확인하세요.
-    </p>
+          <button slot="ar-button" class="ar-button">▣ &nbsp; AR로 보기</button>
+        </model-viewer>
 
-    <a class="download" href="1234.usdz">USDZ 파일 직접 열기</a>
+        <div class="hint">드래그: 회전 · 휠/핀치: 확대·축소</div>
+      </div>
+
+      <div class="info">
+        <h2>작품 AR 체험</h2>
+        <p>화면에서 모델을 회전·확대하여 확인한 뒤, AR 버튼을 누르면 스마트폰 카메라 화면 위 실제 공간에 작품을 배치할 수 있습니다.</p>
+
+        <div class="steps">
+          <div class="step"><b>01</b><span>QR코드 또는 링크 접속</span></div>
+          <div class="step"><b>02</b><span>3D 작품 회전·확대</span></div>
+          <div class="step"><b>03</b><span>AR 버튼 선택</span></div>
+          <div class="step"><b>04</b><span>실제 공간에 배치</span></div>
+        </div>
+      </div>
+    </section>
+
+    <footer>Graduation Furniture Design WebAR Sample</footer>
   </main>
 </body>
 </html>
